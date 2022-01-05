@@ -2,6 +2,7 @@ package BDEntities;
 
 import javax.persistence.*;
 
+//Se crea esta clase para no repetir los atributos, aunque pienso que deberiamos dejarlo como estaba para no complicarnos
 @Entity
 public class Ojo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
