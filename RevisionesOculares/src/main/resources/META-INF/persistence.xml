@@ -5,5 +5,11 @@
              version="2.2">
     <persistence-unit name="default">
 
+        <class>DataBaseEntities.Client</class>
+        <class>DataBaseEntities.Eye</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/revocular"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+        </properties>
     </persistence-unit>
 </persistence>
