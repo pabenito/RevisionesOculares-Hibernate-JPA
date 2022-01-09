@@ -1,12 +1,13 @@
 package BDEntities;
 
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "tclient", schema = "revocular")
 public class Client {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "NIF")
     private String nif;
@@ -19,6 +20,7 @@ public class Client {
     @Basic
     @Column(name = "EDAD")
     private int edad;
+
     @OneToMany(mappedBy = "tclientByNif")
     private Collection<Eye> teyesByNif;
 
@@ -77,6 +79,7 @@ public class Client {
         result = 31 * result + edad;
         return result;
     }
+
 
     public Collection<Eye> getTeyesByNif() {
         return teyesByNif;

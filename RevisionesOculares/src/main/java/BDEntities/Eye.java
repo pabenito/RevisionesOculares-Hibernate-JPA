@@ -11,7 +11,7 @@ public class Eye {
     @Column(name = "ID")
     private int id;
     @Basic
-    @Column(name = "NIF")
+    @Column(name = "NIF", insertable = false, updatable = false)
     private String nif;
     @Basic
     @Column(name = "CONSULTA")
