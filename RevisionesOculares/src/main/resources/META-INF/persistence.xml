@@ -5,12 +5,5 @@
              version="2.2">
     <persistence-unit name="default">
 
-        <class>BDEntities.Cliente</class>
-        <class>BDEntities.Ojo</class>
-        <class>BDEntities.Revision</class>
-        <properties>
-            <property name="hibernate.connection.url" value="jdbc:jtds:sqlserver://localhost:1433/RevisionesOculares"/>
-            <property name="hibernate.connection.driver_class" value="net.sourceforge.jtds.jdbc.Driver"/>
-        </properties>
     </persistence-unit>
 </persistence>
