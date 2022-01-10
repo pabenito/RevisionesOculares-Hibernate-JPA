@@ -1,9 +1,11 @@
 import BDEntities.*;
+import Interfaces.RevisionOcular;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.swing.*;
 
 public class Program {
     public static void main(String[] args) {
@@ -14,6 +16,12 @@ public class Program {
             transaction.begin();
 
             // Creating a client
+            SwingUtilities.invokeLater(() -> {
+                RevisionOcular frame = new RevisionOcular();
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            });
             Client client = new Client();
             client.setNif("1");
             client.setNombre("Pepe");
