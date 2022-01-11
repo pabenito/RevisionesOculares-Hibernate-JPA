@@ -15,8 +15,11 @@ public class Program {
         try {
             transaction.begin();
 
+            /*
+            Query q = entityManager.createQuery("from Client");
+            List<Client> clients = (List<Client>) q.getResultList();
+             */
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
-            //List<Client> clients = new ArrayList<>();
 
             SwingUtilities.invokeLater(() -> {
                 RevisionOcular frame = new RevisionOcular(clients);
