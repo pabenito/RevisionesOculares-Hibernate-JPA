@@ -9,10 +9,10 @@ import java.util.List;
 public class RevisionOcular extends JFrame{
     private JPanel panel1;
     private JTable table1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JPasswordField passwordField1;
-    private JComboBox comboBox1;
+    private JTextField tNIF;
+    private JTextField tNombre;
+    private JPasswordField tApellidos;
+    private JComboBox cEdad;
     private JButton revisionesButton;
     private JButton añadirButton;
     private JButton borrarButton;
@@ -58,7 +58,7 @@ public class RevisionOcular extends JFrame{
     // habrá que hacerlo con action listener u otra cosa
     private void FillFields(){
         int index = table1.getSelectedRow();
-        textField1.setText(clients.get(index).getNif());
+        tNIF.setText(clients.get(index).getNif());
     }
 }
 

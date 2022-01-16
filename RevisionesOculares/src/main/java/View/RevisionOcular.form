@@ -54,7 +54,7 @@
           <text value="NIF"/>
         </properties>
       </component>
-      <component id="d883c" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+      <component id="d883c" class="javax.swing.JTextField" binding="tNIF">
         <constraints>
           <grid row="3" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -64,7 +64,7 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="7e162" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+      <component id="7e162" class="javax.swing.JTextField" binding="tNombre">
         <constraints>
           <grid row="4" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -80,7 +80,7 @@
           <text value="Nombre"/>
         </properties>
       </component>
-      <component id="c7a98" class="javax.swing.JPasswordField" binding="passwordField1" default-binding="true">
+      <component id="c7a98" class="javax.swing.JPasswordField" binding="tApellidos">
         <constraints>
           <grid row="5" column="3" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -88,7 +88,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="9c638" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+      <component id="9c638" class="javax.swing.JComboBox" binding="cEdad">
         <constraints>
           <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
