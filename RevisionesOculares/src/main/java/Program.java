@@ -1,9 +1,11 @@
 import BDEntities.*;
+import View.RevisionOcular;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import javax.swing.*;
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Program {
     public static void main(String[] args) {
@@ -13,7 +15,18 @@ public class Program {
         try {
             transaction.begin();
 
-            // Creating a client
+            /*
+            Query q = entityManager.createQuery("from Client");
+            List<Client> clients = (List<Client>) q.getResultList();
+             */
+            List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
+
+            SwingUtilities.invokeLater(() -> {
+                RevisionOcular frame = new RevisionOcular(clients);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            });
             Client client = new Client();
             client.setNif("1");
             client.setNombre("Pepe");
