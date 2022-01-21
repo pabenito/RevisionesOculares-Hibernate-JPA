@@ -27,6 +27,7 @@ public class Program {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             });
+            /*
             Client client = new Client();
             client.setNif("1");
             client.setNombre("Pepe");
@@ -35,6 +36,7 @@ public class Program {
 
             // Persisting client
             entityManager.persist(client);
+            */
 
             transaction.commit();
         } finally {

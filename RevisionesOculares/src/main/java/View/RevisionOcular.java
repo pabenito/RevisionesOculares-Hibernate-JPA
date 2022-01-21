@@ -1,6 +1,7 @@
 package View;
 
 import BDEntities.Client;
+import Controller.ControllerRevOc;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +31,13 @@ public class RevisionOcular extends JFrame{
         String[] column = {"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
         FillTable(column);
 
+        ControllerRevOc controller = new ControllerRevOc();
+        añadirButton.addActionListener(e -> controller.onAdd());
+        actualizarButton.addActionListener(e -> controller.onMod());
+        borrarButton.addActionListener(e -> controller.onDel());
+        limpiarButton.addActionListener(e -> controller.onClean());
+        salirButton.addActionListener(e -> controller.onExit());
+        revisionesButton.addActionListener(e -> controller.onRevisiones(this));
     }
 
     // he creado este método de tal manera que se pueda copiar y pegar en la otra interfaz.
