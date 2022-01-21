@@ -38,7 +38,7 @@ public class dosINteraz {
         // al crearse el constructor es como el LOAD en C#
         // cargamos la tabla conectándonos a la bbdd
 
-        //lo suyo es poner los action listener y demás en las clases controller
+        //lo suyo es poner los action listener y demás en las clases del paquete Controller
 
         bLimpiar.addActionListener(new ActionListener() {
             @Override
