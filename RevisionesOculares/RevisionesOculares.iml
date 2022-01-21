@@ -6,6 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
+          <factory-entry name="RevisionesOculares" value="054af9a9-d93e-405c-91a4-b4562b6e595e" />
           <factory-entry name="default" value="bac2c181-bd0e-42aa-a6a0-66fccc18be51" />
         </datasource-mapping>
         <naming-strategy-map />
