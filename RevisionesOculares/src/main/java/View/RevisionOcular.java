@@ -34,6 +34,9 @@ public class RevisionOcular extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         columns = new String[]{"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
+        for(int i = 0; i < 20; i++){
+            comboBox1.addItem(i);
+        }
 
         ControllerRevOc controller = new ControllerRevOc();
         controller.FillTable(this);

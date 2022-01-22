@@ -3,10 +3,7 @@ package Controller;
 import BDEntities.Client;
 import View.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
@@ -20,11 +17,20 @@ public class ControllerRevOc {
         try {
             transaction.begin();
 
+            Client client = new Client();
+            client.setNif(revOc.gettNIF().getText());
+            client.setNombre(revOc.gettNombre().getText());
+            client.setApellidos(revOc.gettApellidos().getText());
+            client.setEdad(revOc.getComboBox1().getSelectedIndex());
+
+            if(!entityManager.contains(client)){
+                entityManager.persist(client);
+
+            }
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
+            revOc.setClients(clients);
 
-            //entityManager.persist(seleccionado);
-
-            //FillTable(columns, clients, table);
+            onClean(revOc);
             transaction.commit();
         } finally {
             if (transaction.isActive()) {
@@ -46,14 +52,16 @@ public class ControllerRevOc {
             transaction.begin();
 
             Client cl = revOc.getSeleccionado();
-            entityManager.remove(cl);
+            
+            if(cl != null){
+                entityManager.remove(cl);
+            }
 
-            revOc.setSeleccionado(null);
 
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
+            revOc.setClients(clients);
 
-            FillTable(revOc);
-            FillFields(revOc);
+            onClean(revOc);
             transaction.commit();
         } finally {
             if (transaction.isActive()) {
@@ -65,6 +73,7 @@ public class ControllerRevOc {
     }
 
     public void onClean(RevisionOcular revOc) {
+        revOc.setSeleccionado(null);
         FillTable(revOc);
         FillFields(revOc);
     }
@@ -107,28 +116,28 @@ public class ControllerRevOc {
         revOc.setSeleccionado(null);
     }
 
-    public void FillFields(RevisionOcular a) {
+    public void FillFields(RevisionOcular revOc) {
         //int idx = table1.rowAtPoint(e.getPoint());
-        JTable table1 = a.getTable1();
+        JTable table1 = revOc.getTable1();
         int idx = table1.getSelectedRow();
-        if(idx == -1 && a.getSeleccionado()==null){
+        if(idx == -1 && revOc.getSeleccionado()==null){
 
-            a.gettNIF().setText("");
-            a.gettNombre().setText("");
-            a.gettApellidos().setText("");
-            a.getComboBox1().setSelectedIndex(-1);     //no se si funciona
+            revOc.gettNIF().setText("");
+            revOc.gettNombre().setText("");
+            revOc.gettApellidos().setText("");
+            revOc.getComboBox1().setSelectedIndex(-1);     //no se si funciona
         }else{
-            a.setSeleccionado(new Client());
-            Client sel = a.getSeleccionado();
+            revOc.setSeleccionado(new Client());
+            Client sel = revOc.getSeleccionado();
             sel.setNif(String.valueOf(table1.getValueAt(idx, 0)));
             sel.setNombre(String.valueOf(table1.getValueAt(idx, 1)));
             sel.setApellidos(String.valueOf(table1.getValueAt(idx, 2)));
-            //seleccionado.setEdad();
+            sel.setEdad(revOc.getComboBox1().getSelectedIndex());
 
-            a.gettNIF().setText(sel.getNif());
-            a.gettNombre().setText(sel.getNombre());
-            a.gettApellidos().setText(sel.getApellidos());
-            //comboBox1.setSelectedIndex();
+            revOc.gettNIF().setText(sel.getNif());
+            revOc.gettNombre().setText(sel.getNombre());
+            revOc.gettApellidos().setText(sel.getApellidos());
+            revOc.getComboBox1().setSelectedIndex(sel.getEdad());
             //no se cuantas edades deberia almacenar el comboBox
         }
     }
