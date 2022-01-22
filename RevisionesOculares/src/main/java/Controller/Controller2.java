@@ -92,7 +92,7 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            Eye eye = in.getSeleccionado():
+            Eye eye = in.getSeleccionado();
             entityManager.remove(entityManager.merge(eye));
 
             onClean(in);
