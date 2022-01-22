@@ -22,71 +22,104 @@ public class RevisionOcular extends JFrame{
     private JButton actualizarButton;
     private JButton limpiarButton;
 
+    private String[] columns;
     private List<Client> clients;
     private Client seleccionado;
 
     public RevisionOcular(List<Client> cls){
         clients = cls;
-        seleccionado = new Client();
+        //seleccionado = new Client();
+        seleccionado = null;
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        String[] columns = {"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
-        FillTable(columns);
+        columns = new String[]{"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
 
         ControllerRevOc controller = new ControllerRevOc();
-        añadirButton.addActionListener(e -> controller.onAdd(columns, table1, tNIF.getText(),
-                                            tNombre.getText(), tApellidos.getText(), (int)comboBox1.getSelectedItem()));
-        actualizarButton.addActionListener(e -> controller.onMod());
-        borrarButton.addActionListener(e -> controller.onDel(columns, table1));
-        limpiarButton.addActionListener(e -> controller.onClean());
-        salirButton.addActionListener(e -> controller.onExit());
+        controller.FillTable(this);
+        añadirButton.addActionListener(e -> controller.onAdd(this));
+        actualizarButton.addActionListener(e -> controller.onMod(this));
+        borrarButton.addActionListener(e -> controller.onDel(this));
+        limpiarButton.addActionListener(e -> controller.onClean(this));
+        salirButton.addActionListener(e -> controller.onExit(this));
         revisionesButton.addActionListener(e -> controller.onRevisiones(this));
 
+        RevisionOcular a = this;
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //int idx = table1.rowAtPoint(e.getPoint());
-                int idx = table1.getSelectedRow();
-                seleccionado.setNif(String.valueOf(table1.getValueAt(idx, 0)));
-                seleccionado.setNombre(String.valueOf(table1.getValueAt(idx, 1)));
-                seleccionado.setApellidos(String.valueOf(table1.getValueAt(idx, 2)));
-                //seleccionado.setEdad();
-
-                tNIF.setText(seleccionado.getNif());
-                tNombre.setText(seleccionado.getNombre());
-                tApellidos.setText(seleccionado.getApellidos());
-                //comboBox1.setSelectedIndex();
-                //no se cuantas edades deberia almacenar el comboBox
+                //controller.FillFields(table1, seleccionado, tNIF, tNombre, tApellidos, comboBox1);
+                controller.FillFields(a);
             }
         });
+
     }
 
-    // he creado este método de tal manera que se pueda copiar y pegar en la otra interfaz.
-    private void FillTable(String[] column){
-        //DefaultTableModel dtm = new DefaultTableModel(column, 0);
-        DefaultTableModel dtm = new DefaultTableModel();
-        for (int i = 0; i < column.length; i++) {
-            dtm.addColumn(column[i]);
-        }
-        /*
-        Font f = new Font("Georgia", Font.BOLD, 16);
-        JTableHeader header = ledgerTable.getTableHeader();
-        header.setFont(f);
-        ledgerTable.setRowHeight(25);
-        */
+    public JTable getTable1() {
+        return table1;
+    }
 
-        for (int i = 0; i < clients.size(); i++) {
-            dtm.addRow(new Object[]{clients.get(i).getNif(), clients.get(i).getNombre(), clients.get(i).getApellidos(), clients.get(i).getEdad()});
-        }
-        table1.setModel(dtm);
+    public void setTable1(JTable table1) {
+        this.table1 = table1;
+    }
+
+    public JTextField gettNIF() {
+        return tNIF;
+    }
+
+    public void settNIF(JTextField tNIF) {
+        this.tNIF = tNIF;
+    }
+
+    public JTextField gettNombre() {
+        return tNombre;
+    }
+
+    public void settNombre(JTextField tNombre) {
+        this.tNombre = tNombre;
+    }
+
+    public JTextField gettApellidos() {
+        return tApellidos;
+    }
+
+    public void settApellidos(JTextField tApellidos) {
+        this.tApellidos = tApellidos;
+    }
+
+    public JComboBox getComboBox1() {
+        return comboBox1;
+    }
+
+    public void setComboBox1(JComboBox comboBox1) {
+        this.comboBox1 = comboBox1;
+    }
+
+    public Client getSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(Client seleccionado) {
+        this.seleccionado = seleccionado;
+    }
+
+    public String[] getColumns() {
+        return columns;
+    }
+
+    public void setColumns(String[] columns) {
+        this.columns = columns;
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
     }
 
     //me imagino que para que se actualice la interfazen tiempo real,
     // habrá que hacerlo con action listener u otra cosa
-    private void FillFields(){
-        int index = table1.getSelectedRow();
-        tNIF.setText(clients.get(index).getNif());
-    }
 }
 
