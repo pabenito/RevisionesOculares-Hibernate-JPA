@@ -2,18 +2,23 @@ package View;
 
 import BDEntities.Client;
 import BDEntities.Eye;
+import Controller.Controller2;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Date;
+
 import java.util.Calendar;
 
 import static java.lang.System.exit;
 
 public class dosINteraz extends JFrame{
-    private Eye seleccionado;
-    private Client clienteSeleccionado;
+    private Client ClienteSeleccionado;
+    private Eye Seleccionado;
 
     private JPanel panel2;
     private JTextField tOD_ESFERA;
@@ -32,115 +37,142 @@ public class dosINteraz extends JFrame{
     private JButton bLimpiar;
     private JButton bSalir;
 
-    public dosINteraz() {
-        seleccionado = null;
+    public dosINteraz(Client cs, List<Eye> eyes) {
+
 
         setContentPane(panel2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // al crearse el constructor es como el LOAD en C#
-        // cargamos la tabla conectándonos a la bbdd
+        Controller2 controller = new Controller2();
+        //LOAD
+        String[] columns = {"ID", "NIF", "CONSULTA", "OD_ESFERA", "OD_CILINDRO", "OD_ADICION", "OD_AGUDEZA", "OI_ESFERA", "OI_CILINDRO", "OI_ADICION", "OI_AGUDEZA"};
+        controller.FilLTable(columns, eyes, this.getTable1());
+        controller.showCliente(cs, this.getTextField2());
 
-        //lo suyo es poner los action listener y demás en las clases del paquete Controller
+        //-----------------------
 
-        bLimpiar.addActionListener(new ActionListener() {
+        //SELECTION CHANGED
+        Eye seleccionado = new Eye();
+        table1.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                seleccionado = null;
-                mostrarSeleccionado();
+            public void mouseClicked(MouseEvent e) {
+                //int idx = table1.rowAtPoint(e.getPoint());
+                int idx = table1.getSelectedRow();
+                seleccionado.setId(Integer.valueOf((int) table1.getValueAt(idx, 0)));
+                seleccionado.setNif(String.valueOf(table1.getValueAt(idx, 1)));
+                seleccionado.setConsulta(Date.valueOf(table1.getValueAt(idx, 2)));
+                seleccionado.setOdEsfera(Double.valueOf((double) table1.getValueAt(idx, 3)));
+                seleccionado.setOdCilindro(Double.valueOf((double) table1.getValueAt(idx, 4)));
+                seleccionado.setOdAdicion(Double.valueOf((double) table1.getValueAt(idx, 5)));
+                seleccionado.setOdAgudeza(Double.valueOf((double) table1.getValueAt(idx, 6)));
+                seleccionado.setOiEsfera(Double.valueOf((double) table1.getValueAt(idx, 7)));
+                seleccionado.setOiCilindro(Double.valueOf((double) table1.getValueAt(idx, 8)));
+                seleccionado.setOiAdicion(Double.valueOf((double) table1.getValueAt(idx, 9)));
+                seleccionado.setOiAgudeza(Double.valueOf((double) table1.getValueAt(idx, 10)));
+
             }
         });
-        bAñadir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-                try {
-                    // falta conectar con la bbdd
-
-                    Eye prueba = new Eye();
-                    prueba.setOdAdicion(seleccionado.getOdAdicion());
-                    prueba.setOdAgudeza(seleccionado.getOdAgudeza());
-                    prueba.setOdCilindro(seleccionado.getOdCilindro());
-                    prueba.setOdEsfera(seleccionado.getOdEsfera());
-
-                    prueba.setOiAdicion(seleccionado.getOiAdicion());
-                    prueba.setOiAgudeza(seleccionado.getOiAgudeza());
-                    prueba.setOiCilindro(seleccionado.getOiCilindro());
-                    prueba.setOiEsfera(seleccionado.getOiEsfera());
-
-                    // miBd. .inssert(prueba)
+        controller.mostrarSeleccionado(seleccionado, this);
+        //-------------------------
+        //BOTÓN PULSADO
+        bLimpiar.addActionListener(e -> controller.onClean(this));
+        bAñadir.addActionListener(e -> controller.onAdd(this));
+        bBorrar.addActionListener(e -> controller.onDel(this));
+        bSalir.addActionListener(e -> controller.onExit(this));
+        bActualizar.addActionListener(e -> controller.onMod(this));
 
 
-                    table1.clearSelection();
-                    //cargamos la bd de nuevo
-
-
-                    seleccionado = null;
-                    mostrarSeleccionado();
-
-
-                } catch (Exception ex) {
-                    System.err.println("ERROR " + ex.getMessage()); // esto hay que cambiarlo parar que salga una pantallita
-                }
-            }
-        });
-        bBorrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                exit(-1);
-            }
-        });
-        bBorrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // falta conectar con la bbdd
-
-
-                    //   mibd.borrar(seleccionado)
-                    table1.clearSelection();
-                    //cargamos la bd de nuevo
-                    seleccionado = null;
-                    mostrarSeleccionado();
-
-
-                } catch (Exception ex) {
-                    System.err.println("ERROR " + ex.getMessage()); // esto hay que cambiarlo parar que salga una pantallita
-                }
-            }
-        });
+    }
+    public JTextField gettOD_CILINDRO() {
+        return tOD_CILINDRO;
     }
 
+    public JTextField gettOD_ESFERA() {
+        return tOD_ESFERA;
+    }
 
-    public void mostrarSeleccionado() {
-        if (seleccionado == null) {
-            // podriarecargar el cread
+    public JTextField gettOD_ADICION() {
+        return tOD_ADICION;
+    }
 
-            table1.clearSelection();
+    public JTextField gettOD_AGUDEZA() {
+        return tOD_AGUDEZA;
+    }
 
-            tID_ADICION.setText("");
-            tID_AGUDEZA.setText("");
-            tID_CILINDRO.setText("");
-            tID_ESFERA.setText("");
-            tOD_ADICION.setText("");
-            tOD_AGUDEZA.setText("");
-            tOD_CILINDRO.setText("");
-            tOD_AGUDEZA.setText("");
-            tOD_ESFERA.setText("");
+    public JTextField gettID_AGUDEZA() {
+        return tID_AGUDEZA;
+    }
 
+    public JTextField gettID_ADICION() {
+        return tID_ADICION;
+    }
 
-        } else {
+    public JTextField gettID_CILINDRO() {
+        return tID_CILINDRO;
+    }
 
+    public JTextField gettID_ESFERA() {
+        return tID_ESFERA;
+    }
 
-            tID_ADICION.setText("" + seleccionado.getOiAdicion());
-            tID_AGUDEZA.setText("" + seleccionado.getOiAgudeza());
-            tID_CILINDRO.setText("" + seleccionado.getOdCilindro());
-            tID_ESFERA.setText("" + seleccionado.getOdEsfera());
-            tOD_ADICION.setText("" + seleccionado.getOdAdicion());
-            tOD_AGUDEZA.setText("" + seleccionado.getOdAgudeza());
-            tOD_CILINDRO.setText("" + seleccionado.getOdCilindro());
-            tOD_AGUDEZA.setText("" + seleccionado.getOdAgudeza());
-        }
+    public void settOD_CILINDRO(JTextField tOD_CILINDRO) {
+        this.tOD_CILINDRO = tOD_CILINDRO;
+    }
+
+    public void settOD_ADICION(JTextField tOD_ADICION) {
+        this.tOD_ADICION = tOD_ADICION;
+    }
+
+    public void settOD_AGUDEZA(JTextField tOD_AGUDEZA) {
+        this.tOD_AGUDEZA = tOD_AGUDEZA;
+    }
+
+    public void settID_AGUDEZA(JTextField tID_AGUDEZA) {
+        this.tID_AGUDEZA = tID_AGUDEZA;
+    }
+
+    public void settID_ADICION(JTextField tID_ADICION) {
+        this.tID_ADICION = tID_ADICION;
+    }
+
+    public void settID_CILINDRO(JTextField tID_CILINDRO) {
+        this.tID_CILINDRO = tID_CILINDRO;
+    }
+
+    public void settID_ESFERA(JTextField tID_ESFERA) {
+        this.tID_ESFERA = tID_ESFERA;
+    }
+
+    public void settOD_ESFERA(JTextField tOD_ESFERA) {
+        this.tOD_ESFERA = tOD_ESFERA;
+    }
+
+    public JTable getTable1() {
+        return table1;
+    }
+
+    public void setTable1(JTable table1) {
+        this.table1 = table1;
+    }
+
+    public JTextField getTextField2() {
+        return textField2;
+    }
+
+    public Client getClienteSeleccionado() {
+        return ClienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(Client clienteSeleccionado) {
+        ClienteSeleccionado = clienteSeleccionado;
+    }
+
+    public Eye getSeleccionado() {
+        return Seleccionado;
+    }
+
+    public void setSeleccionado(Eye seleccionado) {
+        Seleccionado = seleccionado;
     }
 }
