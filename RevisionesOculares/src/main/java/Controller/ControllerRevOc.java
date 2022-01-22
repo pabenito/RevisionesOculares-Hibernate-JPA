@@ -48,21 +48,21 @@ public class ControllerRevOc {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
+
         try {
             transaction.begin();
 
-            Client cl = revOc.getSeleccionado();
-            
-            if(cl != null){
-                entityManager.remove(cl);
-            }
-
+            Client client = revOc.getSeleccionado();
+            entityManager.remove(entityManager.merge(client));
 
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
             revOc.setClients(clients);
 
             onClean(revOc);
             transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -132,7 +132,7 @@ public class ControllerRevOc {
             sel.setNif(String.valueOf(table1.getValueAt(idx, 0)));
             sel.setNombre(String.valueOf(table1.getValueAt(idx, 1)));
             sel.setApellidos(String.valueOf(table1.getValueAt(idx, 2)));
-            sel.setEdad(revOc.getComboBox1().getSelectedIndex());
+            sel.setEdad(Integer.valueOf((Integer) table1.getValueAt(idx, 3)));
 
             revOc.gettNIF().setText(sel.getNif());
             revOc.gettNombre().setText(sel.getNombre());
