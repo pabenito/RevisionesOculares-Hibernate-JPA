@@ -5,12 +5,9 @@ import BDEntities.Eye;
 import Controller.Controller2;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.Date;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.*;
+import java.util.List;
 
 import java.util.Calendar;
 
@@ -36,6 +33,7 @@ public class dosINteraz extends JFrame{
     private JButton bAñadir;
     private JButton bLimpiar;
     private JButton bSalir;
+    //private JCalendar jcalendar;
 
     public dosINteraz(Client cs, List<Eye> eyes) {
 
@@ -46,7 +44,7 @@ public class dosINteraz extends JFrame{
         Controller2 controller = new Controller2();
         //LOAD
         String[] columns = {"ID", "NIF", "CONSULTA", "OD_ESFERA", "OD_CILINDRO", "OD_ADICION", "OD_AGUDEZA", "OI_ESFERA", "OI_CILINDRO", "OI_ADICION", "OI_AGUDEZA"};
-        controller.FilLTable(columns, eyes, this.getTable1());
+        controller.FillTable(columns, eyes, this.getTable1());
         controller.showCliente(cs, this.getTextField2());
 
         //-----------------------
@@ -84,6 +82,9 @@ public class dosINteraz extends JFrame{
 
 
     }
+    //---------------------
+
+    //GETTERS Y SETTERS
     public JTextField gettOD_CILINDRO() {
         return tOD_CILINDRO;
     }
@@ -175,4 +176,5 @@ public class dosINteraz extends JFrame{
     public void setSeleccionado(Eye seleccionado) {
         Seleccionado = seleccionado;
     }
+     // SETTER Y GETTER DE JCALENDAR
 }
