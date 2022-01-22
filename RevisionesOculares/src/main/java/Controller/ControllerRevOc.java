@@ -23,15 +23,14 @@ public class ControllerRevOc {
             client.setApellidos(revOc.gettApellidos().getText());
             client.setEdad(revOc.getComboBox1().getSelectedIndex());
 
-            if(!entityManager.contains(client)){
-                entityManager.persist(client);
-
-            }
+            entityManager.persist(client);
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
             revOc.setClients(clients);
 
             onClean(revOc);
             transaction.commit();
+        } catch (PersistenceException e){
+            onClean(revOc);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -42,13 +41,51 @@ public class ControllerRevOc {
     }
 
     public void onMod(RevisionOcular revOc) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+
+            Client client = new Client();
+            client.setNif(revOc.gettNIF().getText());
+            client.setNombre(revOc.gettNombre().getText());
+            client.setApellidos(revOc.gettApellidos().getText());
+            client.setEdad(revOc.getComboBox1().getSelectedIndex());
+
+            //revOc.getSeleccionado().setNif(client.getNif());
+            revOc.getSeleccionado().setNombre(client.getNombre());
+            revOc.getSeleccionado().setApellidos(client.getApellidos());
+            revOc.getSeleccionado().setEdad(client.getEdad());
+
+            entityManager.merge(client);
+            if(!client.getNif().equals(revOc.getSeleccionado().getNif())){
+                entityManager.remove(entityManager.merge(revOc.getSeleccionado()));
+            }
+
+            //entityManager.merge(client);
+
+            //entityManager.persist(client);
+            List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
+            revOc.setClients(clients);
+
+            onClean(revOc);
+            transaction.commit();
+        } catch (PersistenceException e){
+            onClean(revOc);
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            entityManager.close();
+            entityManagerFactory.close();
+        }
     }
 
     public void onDel(RevisionOcular revOc) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-
 
         try {
             transaction.begin();
