@@ -17,6 +17,10 @@ public class dosINteraz extends JFrame{
     private Client ClienteSeleccionado;
     private Eye Seleccionado;
 
+
+    private String [] columns;
+    private List <Eye> eyes;
+
     private JPanel panel2;
     private JTextField tOD_ESFERA;
     private JButton bBorrar;
@@ -42,9 +46,13 @@ public class dosINteraz extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Controller2 controller = new Controller2();
+
+        columns = new String[]{"ID", "NIF", "CONSULTA", "OD_ESFERA", "OD_CILINDRO", "OD_ADICION", "OD_AGUDEZA", "OI_ESFERA", "OI_CILINDRO", "OI_ADICION", "OI_AGUDEZA"};
+        this.eyes = eyes;
+        ClienteSeleccionado = cs;
+
         //LOAD
-        String[] columns = {"ID", "NIF", "CONSULTA", "OD_ESFERA", "OD_CILINDRO", "OD_ADICION", "OD_AGUDEZA", "OI_ESFERA", "OI_CILINDRO", "OI_ADICION", "OI_AGUDEZA"};
-        controller.FillTable(columns, eyes, this.getTable1());
+        controller.FillTable(columns, eyes, this.getTable1(),cs);
         controller.showCliente(cs, this.getTextField2());
 
         //-----------------------
@@ -92,6 +100,7 @@ public class dosINteraz extends JFrame{
     public JTextField gettOD_ESFERA() {
         return tOD_ESFERA;
     }
+
 
     public JTextField gettOD_ADICION() {
         return tOD_ADICION;
@@ -176,5 +185,22 @@ public class dosINteraz extends JFrame{
     public void setSeleccionado(Eye seleccionado) {
         Seleccionado = seleccionado;
     }
-     // SETTER Y GETTER DE JCALENDAR
+
+    public String[] getColumn() {
+        return columns;
+    }
+
+    public void setColumn(String[] column) {
+        this.columns = column;
+    }
+
+    public List<Eye> getEyes() {
+        return eyes;
+    }
+
+    public void setEyes(List<Eye> eyes) {
+        this.eyes = eyes;
+    }
+
+    // SETTER Y GETTER DE JCALENDAR
 }

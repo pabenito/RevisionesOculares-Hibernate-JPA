@@ -23,6 +23,22 @@ public class Controller2 {
             entityManager.persist(in.getSeleccionado());
             entityManager.persist(in.getSeleccionado());
 
+            Eye eye = new Eye();
+            eye.setId(in.getSeleccionado().getId());
+            eye.setNif(in.getClienteSeleccionado().getNif());
+            //eye.setConsulta();
+            eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
+            eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
+            eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
+            eye.setOdAgudeza(Double.parseDouble(in.gettOD_AGUDEZA().getText()));
+
+            eye.setOiEsfera(Double.parseDouble(in.gettID_ESFERA().getText()));
+            eye.setOiCilindro(Double.parseDouble(in.gettID_CILINDRO().getText()));
+            eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
+            eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
+
+            entityManager.persist(eye);
+            onClean(in);
         }finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -39,8 +55,26 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
+            Eye eye = new Eye();
+            eye.setId(in.getSeleccionado().getId());
+            eye.setNif(in.getClienteSeleccionado().getNif());
+            //eye.setConsulta();
+            eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
+            eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
+            eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
+            eye.setOdAgudeza(Double.parseDouble(in.gettOD_AGUDEZA().getText()));
+
+            eye.setOiEsfera(Double.parseDouble(in.gettID_ESFERA().getText()));
+            eye.setOiCilindro(Double.parseDouble(in.gettID_CILINDRO().getText()));
+            eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
+            eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
+
+            entityManager.merge(eye);
 
 
+
+
+            onClean(in);
         }finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -58,7 +92,11 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.remove(in.getSeleccionado());
+            Eye eye = in.getSeleccionado():
+            entityManager.remove(entityManager.merge(eye));
+
+            onClean(in);
+
 
         }finally {
             if (transaction.isActive()) {
@@ -102,7 +140,7 @@ public class Controller2 {
 
     public void mostrarSeleccionado(Eye seleccionado, dosINteraz in) {
         if (seleccionado == null) {
-            // podriarecargar el cread
+            FillTable(in.getColumn(),in.getEyes(),in.getTable1(),in.getClienteSeleccionado());
 
             in.getTable1().clearSelection();
 
@@ -130,7 +168,7 @@ public class Controller2 {
             in.gettOD_ESFERA().setText("" + seleccionado.getOdAgudeza());
         }
     }
-    public void FillTable(String[] column, List <Eye> eyes, JTable table1){
+    public void FillTable(String[] column, List <Eye> eyes, JTable table1, Client cl){
 
         DefaultTableModel dtm = new DefaultTableModel();
         for (int i = 0; i < column.length; i++) {
@@ -138,7 +176,7 @@ public class Controller2 {
         }
 
         for (int i = 0; i < eyes.size(); i++) {
-            dtm.addRow(new Object[]{eyes.get(i).getId(), eyes.get(i).getConsulta(),
+            dtm.addRow(new Object[]{eyes.get(i).getId(), cl.getNif(),eyes.get(i).getConsulta(),
                     eyes.get(i).getOdEsfera(), eyes.get(i).getOdCilindro(), eyes.get(i).getOdAdicion(), eyes.get(i).getOdAgudeza(),
                     eyes.get(i).getOiEsfera(), eyes.get(i).getOiCilindro(), eyes.get(i).getOiAdicion(), eyes.get(i).getOiAgudeza()});
         }
