@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 import static java.lang.System.exit;
 
-public class dosINteraz {
+public class dosINteraz extends JFrame{
     private Eye seleccionado;
     private Client clienteSeleccionado;
 
@@ -34,6 +34,9 @@ public class dosINteraz {
 
     public dosINteraz() {
         seleccionado = null;
+
+        setContentPane(panel2);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // al crearse el constructor es como el LOAD en C#
         // cargamos la tabla conectándonos a la bbdd
@@ -139,13 +142,5 @@ public class dosINteraz {
             tOD_CILINDRO.setText("" + seleccionado.getOdCilindro());
             tOD_AGUDEZA.setText("" + seleccionado.getOdAgudeza());
         }
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("dosINteraz");
-        frame.setContentPane(new dosINteraz().panel2);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
     }
 }

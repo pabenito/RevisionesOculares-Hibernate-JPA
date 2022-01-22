@@ -5,14 +5,15 @@ import Controller.ControllerRevOc;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.*;
 import java.util.List;
 
 public class RevisionOcular extends JFrame{
     private JPanel panel1;
     private JTable table1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JPasswordField passwordField1;
+    private JTextField tNIF;
+    private JTextField tNombre;
+    private JTextField tApellidos;
     private JComboBox comboBox1;
     private JButton revisionesButton;
     private JButton añadirButton;
@@ -22,29 +23,48 @@ public class RevisionOcular extends JFrame{
     private JButton limpiarButton;
 
     private List<Client> clients;
+    private Client seleccionado;
 
     public RevisionOcular(List<Client> cls){
         clients = cls;
+        seleccionado = new Client();
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        String[] column = {"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
-        FillTable(column);
+        String[] columns = {"NIF", "NOMBRE", "APELLIDOS", "EDAD"};
+        FillTable(columns);
 
         ControllerRevOc controller = new ControllerRevOc();
-        añadirButton.addActionListener(e -> controller.onAdd());
+        añadirButton.addActionListener(e -> controller.onAdd(columns, table1, tNIF.getText(),
+                                            tNombre.getText(), tApellidos.getText(), (int)comboBox1.getSelectedItem()));
         actualizarButton.addActionListener(e -> controller.onMod());
-        borrarButton.addActionListener(e -> controller.onDel());
+        borrarButton.addActionListener(e -> controller.onDel(columns, table1));
         limpiarButton.addActionListener(e -> controller.onClean());
         salirButton.addActionListener(e -> controller.onExit());
         revisionesButton.addActionListener(e -> controller.onRevisiones(this));
+
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //int idx = table1.rowAtPoint(e.getPoint());
+                int idx = table1.getSelectedRow();
+                seleccionado.setNif(String.valueOf(table1.getValueAt(idx, 0)));
+                seleccionado.setNombre(String.valueOf(table1.getValueAt(idx, 1)));
+                seleccionado.setApellidos(String.valueOf(table1.getValueAt(idx, 2)));
+                //seleccionado.setEdad();
+
+                tNIF.setText(seleccionado.getNif());
+                tNombre.setText(seleccionado.getNombre());
+                tApellidos.setText(seleccionado.getApellidos());
+                //comboBox1.setSelectedIndex();
+                //no se cuantas edades deberia almacenar el comboBox
+            }
+        });
     }
 
     // he creado este método de tal manera que se pueda copiar y pegar en la otra interfaz.
     private void FillTable(String[] column){
-
         //DefaultTableModel dtm = new DefaultTableModel(column, 0);
-
         DefaultTableModel dtm = new DefaultTableModel();
         for (int i = 0; i < column.length; i++) {
             dtm.addColumn(column[i]);
@@ -66,7 +86,7 @@ public class RevisionOcular extends JFrame{
     // habrá que hacerlo con action listener u otra cosa
     private void FillFields(){
         int index = table1.getSelectedRow();
-        textField1.setText(clients.get(index).getNif());
+        tNIF.setText(clients.get(index).getNif());
     }
 }
 
