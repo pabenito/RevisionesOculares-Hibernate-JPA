@@ -47,12 +47,12 @@ public class RevisionOcular extends JFrame{
         salirButton.addActionListener(e -> controller.onExit(this));
         revisionesButton.addActionListener(e -> controller.onRevisiones(this));
 
-        RevisionOcular a = this;
+        RevisionOcular revOc = this;
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //controller.FillFields(table1, seleccionado, tNIF, tNombre, tApellidos, comboBox1);
-                controller.FillFields(a);
+                controller.FillFields(revOc);
             }
         });
 

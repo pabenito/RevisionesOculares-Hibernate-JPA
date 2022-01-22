@@ -2,19 +2,19 @@ package View;
 
 import BDEntities.Client;
 import BDEntities.Eye;
+import Controller.Controller2;
+import com.toedter.calendar.JCalendar;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 import static java.lang.System.exit;
 
 public class dosINteraz extends JFrame{
-    private Eye seleccionado;
-    private Client clienteSeleccionado;
-
     private JPanel panel2;
     private JTextField tOD_ESFERA;
     private JButton bBorrar;
@@ -31,116 +31,143 @@ public class dosINteraz extends JFrame{
     private JButton bAñadir;
     private JButton bLimpiar;
     private JButton bSalir;
+    private JCalendar JCalendar1;
 
-    public dosINteraz() {
+    private String [] columns;
+    private List <Eye> eyes;
+    private Eye seleccionado;
+    private Client clienteSeleccionado;
+
+    public dosINteraz(Client client, List<Eye> eys) {
+        this.eyes = eys;
+        clienteSeleccionado = client;
         seleccionado = null;
 
         setContentPane(panel2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // al crearse el constructor es como el LOAD en C#
-        // cargamos la tabla conectándonos a la bbdd
+        columns = new String[]{"ID", "NIF", "CONSULTA", "OD_ESFERA", "OD_CILINDRO", "OD_ADICION", "OD_AGUDEZA", "OI_ESFERA", "OI_CILINDRO", "OI_ADICION", "OI_AGUDEZA"};
 
-        //lo suyo es poner los action listener y demás en las clases del paquete Controller
+        Controller2 controller = new Controller2();
+        controller.FillTable(this);
+        bLimpiar.addActionListener(e -> controller.onClean(this));
+        bAñadir.addActionListener(e -> controller.onAdd(this));
+        bBorrar.addActionListener(e -> controller.onDel(this));
+        bSalir.addActionListener(e -> controller.onExit(this));
+        bActualizar.addActionListener(e -> controller.onMod(this));
 
-        bLimpiar.addActionListener(new ActionListener() {
+        dosINteraz dIn = this;
+        table1.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                seleccionado = null;
-                mostrarSeleccionado();
-            }
-        });
-        bAñadir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    // falta conectar con la bbdd
-
-                    Eye prueba = new Eye();
-                    prueba.setOdAdicion(seleccionado.getOdAdicion());
-                    prueba.setOdAgudeza(seleccionado.getOdAgudeza());
-                    prueba.setOdCilindro(seleccionado.getOdCilindro());
-                    prueba.setOdEsfera(seleccionado.getOdEsfera());
-
-                    prueba.setOiAdicion(seleccionado.getOiAdicion());
-                    prueba.setOiAgudeza(seleccionado.getOiAgudeza());
-                    prueba.setOiCilindro(seleccionado.getOiCilindro());
-                    prueba.setOiEsfera(seleccionado.getOiEsfera());
-
-                    // miBd. .inssert(prueba)
-
-
-                    table1.clearSelection();
-                    //cargamos la bd de nuevo
-
-
-                    seleccionado = null;
-                    mostrarSeleccionado();
-
-
-                } catch (Exception ex) {
-                    System.err.println("ERROR " + ex.getMessage()); // esto hay que cambiarlo parar que salga una pantallita
-                }
-            }
-        });
-        bBorrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                exit(-1);
-            }
-        });
-        bBorrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // falta conectar con la bbdd
-
-
-                    //   mibd.borrar(seleccionado)
-                    table1.clearSelection();
-                    //cargamos la bd de nuevo
-                    seleccionado = null;
-                    mostrarSeleccionado();
-
-
-                } catch (Exception ex) {
-                    System.err.println("ERROR " + ex.getMessage()); // esto hay que cambiarlo parar que salga una pantallita
-                }
+            public void mouseClicked(MouseEvent e) {
+                //controller.FillFields(table1, seleccionado, tNIF, tNombre, tApellidos, comboBox1);
+                controller.FillFields(dIn);
             }
         });
     }
 
+    public JTable getTable1() {
+        return table1;
+    }
 
-    public void mostrarSeleccionado() {
-        if (seleccionado == null) {
-            // podriarecargar el cread
+    public void setTable1(JTable table1) {
+        this.table1 = table1;
+    }
 
-            table1.clearSelection();
+    public Eye getSeleccionado() {
+        return seleccionado;
+    }
 
-            tID_ADICION.setText("");
-            tID_AGUDEZA.setText("");
-            tID_CILINDRO.setText("");
-            tID_ESFERA.setText("");
-            tOD_ADICION.setText("");
-            tOD_AGUDEZA.setText("");
-            tOD_CILINDRO.setText("");
-            tOD_AGUDEZA.setText("");
-            tOD_ESFERA.setText("");
+    public void setSeleccionado(Eye seleccionado) {
+        this.seleccionado = seleccionado;
+    }
 
+    public JTextField gettOD_ESFERA() {
+        return tOD_ESFERA;
+    }
 
-        } else {
+    public void settOD_ESFERA(JTextField tOD_ESFERA) {
+        this.tOD_ESFERA = tOD_ESFERA;
+    }
 
+    public JTextField gettOD_CILINDRO() {
+        return tOD_CILINDRO;
+    }
 
-            tID_ADICION.setText("" + seleccionado.getOiAdicion());
-            tID_AGUDEZA.setText("" + seleccionado.getOiAgudeza());
-            tID_CILINDRO.setText("" + seleccionado.getOdCilindro());
-            tID_ESFERA.setText("" + seleccionado.getOdEsfera());
-            tOD_ADICION.setText("" + seleccionado.getOdAdicion());
-            tOD_AGUDEZA.setText("" + seleccionado.getOdAgudeza());
-            tOD_CILINDRO.setText("" + seleccionado.getOdCilindro());
-            tOD_AGUDEZA.setText("" + seleccionado.getOdAgudeza());
-        }
+    public void settOD_CILINDRO(JTextField tOD_CILINDRO) {
+        this.tOD_CILINDRO = tOD_CILINDRO;
+    }
+
+    public JTextField gettOD_ADICION() {
+        return tOD_ADICION;
+    }
+
+    public void settOD_ADICION(JTextField tOD_ADICION) {
+        this.tOD_ADICION = tOD_ADICION;
+    }
+
+    public JTextField gettOD_AGUDEZA() {
+        return tOD_AGUDEZA;
+    }
+
+    public void settOD_AGUDEZA(JTextField tOD_AGUDEZA) {
+        this.tOD_AGUDEZA = tOD_AGUDEZA;
+    }
+
+    public JTextField gettID_AGUDEZA() {
+        return tID_AGUDEZA;
+    }
+
+    public void settID_AGUDEZA(JTextField tID_AGUDEZA) {
+        this.tID_AGUDEZA = tID_AGUDEZA;
+    }
+
+    public JTextField gettID_ADICION() {
+        return tID_ADICION;
+    }
+
+    public void settID_ADICION(JTextField tID_ADICION) {
+        this.tID_ADICION = tID_ADICION;
+    }
+
+    public JTextField gettID_CILINDRO() {
+        return tID_CILINDRO;
+    }
+
+    public void settID_CILINDRO(JTextField tID_CILINDRO) {
+        this.tID_CILINDRO = tID_CILINDRO;
+    }
+
+    public JTextField gettID_ESFERA() {
+        return tID_ESFERA;
+    }
+
+    public void settID_ESFERA(JTextField tID_ESFERA) {
+        this.tID_ESFERA = tID_ESFERA;
+    }
+
+    public JCalendar getJCalendar1() {
+        return JCalendar1;
+    }
+
+    public void setJCalendar1(JCalendar JCalendar1) {
+        this.JCalendar1 = JCalendar1;
+    }
+
+    public String[] getColumns() {
+        return columns;
+    }
+
+    public List<Eye> getEyes() {
+        return eyes;
+    }
+
+    public Client getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        JCalendar1 = new JCalendar();
     }
 }

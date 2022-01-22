@@ -1,12 +1,15 @@
 package Controller;
 
 import BDEntities.Client;
+import BDEntities.Eye;
 import View.*;
 
 import javax.persistence.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ControllerRevOc {
@@ -126,7 +129,13 @@ public class ControllerRevOc {
         if(revOc.getSeleccionado()!=null){
             revOc.dispose();
 
-            dosINteraz rp = new dosINteraz();
+            Collection<Eye> col = revOc.getSeleccionado().getTeyesByNif();
+            List<Eye> eyes = new ArrayList<>();
+            if(col != null){
+                 eyes = new ArrayList<>(col);
+            }
+
+            dosINteraz rp = new dosINteraz(revOc.getSeleccionado(), eyes);
             rp.pack();
             rp.setLocationRelativeTo(null);
             rp.setVisible(true);

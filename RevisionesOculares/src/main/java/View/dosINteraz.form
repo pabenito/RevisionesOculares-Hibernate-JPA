@@ -223,6 +223,11 @@
           <text value="ID_AGUDEZA"/>
         </properties>
       </component>
+      <component id="52706" class="com.toedter.calendar.JCalendar" binding="JCalendar1" custom-create="true" default-binding="true">
+        <constraints>
+          <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </component>
     </children>
   </grid>
 </form>
