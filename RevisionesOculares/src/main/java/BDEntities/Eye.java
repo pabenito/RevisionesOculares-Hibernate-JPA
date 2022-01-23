@@ -6,8 +6,10 @@ import java.sql.Date;
 @Entity
 @Table(name = "teye", schema = "revocular")
 public class Eye {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Basic(fetch=FetchType.LAZY)
     @Id
+    @SequenceGenerator(name="seq", sequenceName="seq")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     @Column(name = "ID")
     private int id;
     @Basic
