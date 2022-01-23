@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e25994a7-37b9-4cdf-a3fd-d9630084863d" name="Changes" comment="Mapped">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/bac2c181-bd0e-42aa-a6a0-66fccc18be51.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bac2c181-bd0e-42aa-a6a0-66fccc18be51.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RevisionesOculares.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RevisionesOculares.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/dosINteraz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/dosINteraz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,13 +82,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -120,6 +116,9 @@
       <workItem from="1641935341022" duration="6011000" />
       <workItem from="1642785679250" duration="1228000" />
       <workItem from="1642787932079" duration="2776000" />
+      <workItem from="1642941621434" duration="324000" />
+      <workItem from="1642942174797" duration="56000" />
+      <workItem from="1642942252963" duration="326000" />
     </task>
     <task id="LOCAL-00001" summary="Mapped">
       <created>1641735207048</created>
