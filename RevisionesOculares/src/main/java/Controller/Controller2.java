@@ -23,7 +23,7 @@ public class Controller2 {
             transaction.begin();
 
             Eye eye = new Eye();
-            //eye.setId(in.getSeleccionado().getId());
+            eye.setId(in.getSeleccionado().getId()+1);
             Random r = new Random();
 
             eye.setId(r.nextInt(100));
@@ -45,6 +45,7 @@ public class Controller2 {
 
 
             entityManager.persist(eye);
+
             List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
                     in.getClienteSeleccionado().getNif()).getResultList();
             in.setEyes(eyes);
@@ -70,9 +71,10 @@ public class Controller2 {
         try {
             transaction.begin();
 
-            Eye eye = new Eye();
-            eye.setId(in.getSeleccionado().getId());
-            eye.setNif(in.getClienteSeleccionado().getNif());
+            Eye eye = entityManager.find(Eye.class, in.getSeleccionado().getId());
+            //Eye eye = new Eye();
+            //eye.setId(in.getSeleccionado().getId());
+            //eye.setNif(in.getClienteSeleccionado().getNif());
 
             Date date = in.getJCalendar1().getDate();
             java.sql.Date date1 = SQLDate(date);
@@ -97,8 +99,8 @@ public class Controller2 {
             in.getSeleccionado().setOiAdicion(eye.getOiAdicion());
             in.getSeleccionado().setOiAgudeza(eye.getOiAgudeza());
 
-            entityManager.merge(eye);
 
+            entityManager.merge(eye);
 
             List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
                     in.getClienteSeleccionado().getNif()).getResultList();
@@ -229,11 +231,6 @@ public class Controller2 {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            /*
-            String formattedDate = simpleDateFormat.format(date);
-            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
-
-             */
 
             java.sql.Date date1 = SQLDate(date);
 
@@ -251,12 +248,12 @@ public class Controller2 {
 
             dIn.gettID_ADICION().setText("" + sel.getOiAdicion());
             dIn.gettID_AGUDEZA().setText("" + sel.getOiAgudeza());
-            dIn.gettID_CILINDRO().setText("" + sel.getOdCilindro());
-            dIn.gettID_ESFERA().setText("" + sel.getOdEsfera());
+            dIn.gettID_CILINDRO().setText("" + sel.getOiCilindro());
+            dIn.gettID_ESFERA().setText("" + sel.getOiEsfera());
             dIn.gettOD_ADICION().setText("" + sel.getOdAdicion());
             dIn.gettOD_AGUDEZA().setText("" + sel.getOdAgudeza());
             dIn.gettOD_CILINDRO().setText("" + sel.getOdCilindro());
-            dIn.gettOD_ESFERA().setText("" + sel.getOdAgudeza());
+            dIn.gettOD_ESFERA().setText("" + sel.getOdEsfera());
             dIn.getJCalendar1().setDate(sel.getConsulta());
         }
     }
