@@ -139,6 +139,7 @@ public class ControllerRevOc {
             rp.pack();
             rp.setLocationRelativeTo(null);
             rp.setVisible(true);
+            revOc.setVisible(false);
         }
     }
 

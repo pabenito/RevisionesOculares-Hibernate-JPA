@@ -60,12 +60,12 @@ public class Eye {
         this.nif = nif;
     }
 
-    public Date getConsulta() {
+    public java.sql.Date getConsulta() {
         return consulta;
     }
 
-    public void setConsulta(Date consulta) {
-        this.consulta = consulta;
+    public void setConsulta(java.sql.Date consulta) {
+        this.consulta =consulta;
     }
 
     public double getOdEsfera() {

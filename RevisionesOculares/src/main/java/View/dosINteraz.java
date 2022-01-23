@@ -166,6 +166,11 @@ public class dosINteraz extends JFrame{
         return clienteSeleccionado;
     }
 
+    public void setPruebas(List<Eye> pruebas) {
+        this.eyes = pruebas;
+    }
+
+
     private void createUIComponents() {
         // TODO: place custom component creation code here
         JCalendar1 = new JCalendar();

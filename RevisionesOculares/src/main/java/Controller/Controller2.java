@@ -4,16 +4,14 @@ import BDEntities.Eye;
 import View.*;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class Controller2 {
 
@@ -23,13 +21,17 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(in.getSeleccionado());
-            entityManager.persist(in.getSeleccionado());
 
+
+            // num aleatorio
             Eye eye = new Eye();
-            eye.setId(in.getSeleccionado().getId());
-            //eye.setNif(in.getClienteSeleccionado().getNif());
-            //eye.setConsulta();
+            Random r = new Random();
+
+            eye.setId(r.nextInt(100));
+            eye.setNif(in.getClienteSeleccionado().getNif());
+
+            //eye.setConsulta(in.getJCalendar1().getDate());
+
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
             eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
             eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
@@ -40,7 +42,17 @@ public class Controller2 {
             eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
 
+
+           //entityManager.persist(in.getSeleccionado());
             entityManager.persist(eye);
+            List<Eye> eyes = (List <Eye>) entityManager.createQuery("from teye").getResultList();
+           in.setPruebas(eyes);
+
+
+
+            onClean(in);
+            transaction.commit();
+        }catch(PersistenceException e) {
             onClean(in);
         }finally {
             if (transaction.isActive()) {
@@ -56,6 +68,7 @@ public class Controller2 {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
             Eye eye = new Eye();
@@ -73,12 +86,22 @@ public class Controller2 {
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
 
             entityManager.merge(eye);
+            if(eye.getId() != in.getSeleccionado().getId() || !eye.getNif().equals(in.getSeleccionado().getNif())){
+                entityManager.remove(entityManager.merge(in.getSeleccionado()));
+            }
 
 
-
+            List<Eye> eyes = (List <Eye>) entityManager.createQuery("from teye").getResultList();
+            in.setPruebas(eyes);
 
             onClean(in);
-        }finally {
+            transaction.commit();
+        }catch(PersistenceException e){
+            onClean(in);
+        }
+
+
+        finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -95,13 +118,20 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
+
             Eye eye = in.getSeleccionado();
             entityManager.remove(entityManager.merge(eye));
 
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from teye").getResultList();
+            in.setPruebas(eyes);
+
             onClean(in);
+            transaction.commit();
 
-
-        }finally {
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -111,9 +141,11 @@ public class Controller2 {
     }
 
     public void onClean(dosINteraz in) {
+
         in.setSeleccionado(null);
         //FillTable(in);
         FillFields(in);
+
     }
 
     public void onExit(dosINteraz in) {
