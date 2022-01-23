@@ -162,11 +162,6 @@ public class Controller2 {
         in.setSeleccionado(null);
     }
 
-
-    public void showCliente(Client cs, JTextField j) {
-        j.setText(cs.toString());
-    }
-
     public void FillFields(dosINteraz dIn) {
         JTable table1 = dIn.getTable1();
         int idx = table1.getSelectedRow();
@@ -216,7 +211,6 @@ public class Controller2 {
             dIn.gettOD_CILINDRO().setText("" + sel.getOdCilindro());
             dIn.gettOD_ESFERA().setText("" + sel.getOdAgudeza());
             dIn.getJCalendar1().setDate(sel.getConsulta());
-            //no se cuantas edades deberia almacenar el comboBox
         }
     }
 }
