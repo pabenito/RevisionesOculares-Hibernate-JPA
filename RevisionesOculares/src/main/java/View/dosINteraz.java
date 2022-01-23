@@ -163,6 +163,10 @@ public class dosINteraz extends JFrame{
         return eyes;
     }
 
+    public void setEyes(List<Eye> eyes) {
+        this.eyes = eyes;
+    }
+
     public Client getClienteSeleccionado() {
         return clienteSeleccionado;
     }

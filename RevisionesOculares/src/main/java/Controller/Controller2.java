@@ -4,16 +4,14 @@ import BDEntities.Eye;
 import View.*;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class Controller2 {
 
@@ -23,13 +21,20 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(in.getSeleccionado());
-            entityManager.persist(in.getSeleccionado());
 
             Eye eye = new Eye();
-            eye.setId(in.getSeleccionado().getId());
-            //eye.setNif(in.getClienteSeleccionado().getNif());
-            //eye.setConsulta();
+            //eye.setId(in.getSeleccionado().getId());
+            Random r = new Random();
+
+            eye.setId(r.nextInt(100));
+            eye.setNif(in.getClienteSeleccionado().getNif());
+
+            Date date = in.getJCalendar1().getDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = simpleDateFormat.format(date);
+            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
+            eye.setConsulta(date1);
+/*
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
             eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
             eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
@@ -40,9 +45,24 @@ public class Controller2 {
             eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
 
+ */
+            eye.setOdEsfera(1);
+            eye.setOdCilindro(1);
+            eye.setOdAdicion(1);
+            eye.setOdAgudeza(1);
+            eye.setOiEsfera(1);
+            eye.setOiCilindro(1);
+            eye.setOiAdicion(1);
+            eye.setOiAgudeza(1);
             entityManager.persist(eye);
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            in.setEyes(eyes);
+
             onClean(in);
-        }finally {
+            transaction.commit();
+        } catch (PersistenceException e){
+            onClean(in);
+        } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -58,10 +78,17 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
+
             Eye eye = new Eye();
             eye.setId(in.getSeleccionado().getId());
-            //eye.setNif(in.getClienteSeleccionado().getNif());
-            //eye.setConsulta();
+            eye.setNif(in.getClienteSeleccionado().getNif());
+
+            Date date = in.getJCalendar1().getDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String formattedDate = simpleDateFormat.format(date);
+            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
+            eye.setConsulta(date1);
+
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
             eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
             eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
@@ -75,10 +102,14 @@ public class Controller2 {
             entityManager.merge(eye);
 
 
-
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            in.setEyes(eyes);
 
             onClean(in);
-        }finally {
+            transaction.commit();
+        } catch (PersistenceException e){
+            onClean(in);
+        } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -95,13 +126,18 @@ public class Controller2 {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
+
             Eye eye = in.getSeleccionado();
             entityManager.remove(entityManager.merge(eye));
 
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            in.setEyes(eyes);
+
             onClean(in);
-
-
-        }finally {
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -112,7 +148,7 @@ public class Controller2 {
 
     public void onClean(dosINteraz in) {
         in.setSeleccionado(null);
-        //FillTable(in);
+        FillTable(in);
         FillFields(in);
     }
 
@@ -124,6 +160,8 @@ public class Controller2 {
             transaction.begin();
             List<Client> clients = (List<Client>) entityManager.createQuery("from Client").getResultList();
 
+            in.dispose();
+
             SwingUtilities.invokeLater(() -> {
                 RevisionOcular frame = new RevisionOcular(clients);
                 frame.pack();
@@ -131,6 +169,7 @@ public class Controller2 {
                 frame.setVisible(true);
             });
 
+            transaction.commit();
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -167,6 +206,7 @@ public class Controller2 {
         int idx = table1.getSelectedRow();
         if(idx == -1 && dIn.getSeleccionado()==null){
 
+            dIn.getJCalendar1().setDate(new Date());
             dIn.gettID_ADICION().setText("");
             dIn.gettID_AGUDEZA().setText("");
             dIn.gettID_CILINDRO().setText("");
@@ -180,19 +220,21 @@ public class Controller2 {
             dIn.setSeleccionado(new Eye());
             Eye sel = dIn.getSeleccionado();
 
-
-            String sDate = String.valueOf(table1.getValueAt(idx, 1));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String sDate = String.valueOf(table1.getValueAt(idx, 2));
             Date date = null;
             try {
-                date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+                date = simpleDateFormat.parse(sDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            String formattedDate = simpleDateFormat.format(date);
+            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
 
 
             sel.setId(Integer.valueOf((Integer) table1.getValueAt(idx, 0)));
             sel.setNif(String.valueOf(table1.getValueAt(idx, 1)));
-            sel.setConsulta((java.sql.Date) date);
+            sel.setConsulta(date1);
             sel.setOdEsfera(Double.valueOf((Double) table1.getValueAt(idx, 3)));
             sel.setOdCilindro(Double.valueOf((Double) table1.getValueAt(idx, 4)));
             sel.setOdAdicion(Double.valueOf((Double) table1.getValueAt(idx, 5)));
