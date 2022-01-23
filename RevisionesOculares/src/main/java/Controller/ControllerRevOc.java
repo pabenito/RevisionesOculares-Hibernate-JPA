@@ -123,22 +123,32 @@ public class ControllerRevOc {
     }
 
     public void onRevisiones(RevisionOcular revOc) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
 
-        //obtener el cliente seleccionado en revisionOcular
 
-        if(revOc.getSeleccionado()!=null){
+        try {
+            transaction.begin();
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
+                                                                    revOc.getSeleccionado().getNif()).getResultList();
+
             revOc.dispose();
 
-            Collection<Eye> col = revOc.getSeleccionado().getTeyesByNif();
-            List<Eye> eyes = new ArrayList<>();
-            if(col != null){
-                 eyes = new ArrayList<>(col);
-            }
+            SwingUtilities.invokeLater(() -> {
+                dosINteraz rp = new dosINteraz(revOc.getSeleccionado(), eyes);
+                rp.pack();
+                rp.setLocationRelativeTo(null);
+                rp.setVisible(true);
+            });
 
-            dosINteraz rp = new dosINteraz(revOc.getSeleccionado(), eyes);
-            rp.pack();
-            rp.setLocationRelativeTo(null);
-            rp.setVisible(true);
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            entityManager.close();
+            entityManagerFactory.close();
         }
     }
 
