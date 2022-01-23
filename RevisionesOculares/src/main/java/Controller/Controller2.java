@@ -32,7 +32,7 @@ public class Controller2 {
             Date date = in.getJCalendar1().getDate();
             java.sql.Date date1 = SQLDate(date);
             eye.setConsulta(date1);
-/*
+
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
             eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
             eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
@@ -43,17 +43,10 @@ public class Controller2 {
             eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
 
- */
-            eye.setOdEsfera(1);
-            eye.setOdCilindro(1);
-            eye.setOdAdicion(1);
-            eye.setOdAgudeza(1);
-            eye.setOiEsfera(1);
-            eye.setOiCilindro(1);
-            eye.setOiAdicion(1);
-            eye.setOiAgudeza(1);
+
             entityManager.persist(eye);
-            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
+                    in.getClienteSeleccionado().getNif()).getResultList();
             in.setEyes(eyes);
 
             onClean(in);
@@ -107,7 +100,8 @@ public class Controller2 {
             entityManager.merge(eye);
 
 
-            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
+                    in.getClienteSeleccionado().getNif()).getResultList();
             in.setEyes(eyes);
 
             onClean(in);
@@ -135,7 +129,8 @@ public class Controller2 {
             Eye eye = in.getSeleccionado();
             entityManager.remove(entityManager.merge(eye));
 
-            List<Eye> eyes = (List<Eye>) entityManager.createQuery("from Eye").getResultList();
+            List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
+                                in.getClienteSeleccionado().getNif()).getResultList();
             in.setEyes(eyes);
 
             onClean(in);
