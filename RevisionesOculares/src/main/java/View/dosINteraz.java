@@ -19,7 +19,6 @@ public class dosINteraz extends JFrame{
     private JTextField tOD_ESFERA;
     private JButton bBorrar;
     private JButton bActualizar;
-    private JTextField textField2;
     private JTable table1;
     private JTextField tOD_CILINDRO;
     private JTextField tOD_ADICION;
@@ -32,6 +31,7 @@ public class dosINteraz extends JFrame{
     private JButton bLimpiar;
     private JButton bSalir;
     private JCalendar JCalendar1;
+    private JLabel label;
 
     private String [] columns;
     private List <Eye> eyes;
@@ -43,6 +43,7 @@ public class dosINteraz extends JFrame{
         clienteSeleccionado = client;
         seleccionado = null;
 
+        label.setText(client.toString());
         setContentPane(panel2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
