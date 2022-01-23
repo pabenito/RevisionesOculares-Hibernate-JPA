@@ -23,10 +23,8 @@ public class Controller2 {
             transaction.begin();
 
             Eye eye = new Eye();
-            eye.setId(in.getSeleccionado().getId()+1);
-            Random r = new Random();
 
-            eye.setId(r.nextInt(100));
+            //eye.setId(id);
             eye.setNif(in.getClienteSeleccionado().getNif());
 
             Date date = in.getJCalendar1().getDate();
@@ -43,8 +41,13 @@ public class Controller2 {
             eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
 
-
-            entityManager.persist(eye);
+            Query q = entityManager.createNativeQuery("INSERT INTO revocular.teye (NIF, CONSULTA, OD_ESFERA, OD_CILINDRO, " +
+                                            "OD_ADICION, OD_AGUDEZA, OI_ESFERA, OI_CILINDRO, OI_ADICION, OI_AGUDEZA)\n" +
+                    "VALUES ('" + eye.getNif() + "', '" + eye.getConsulta() + "', " + eye.getOdEsfera() + ", "
+                    + eye.getOdCilindro() + ", " + eye.getOdAdicion() + ", " + eye.getOdAgudeza() + ", "
+                    + eye.getOiEsfera() + ", " + eye.getOiCilindro() + ", " + eye.getOiAdicion() + ", " + eye.getOiAgudeza() + ");");
+            q.executeUpdate();
+            //entityManager.persist(eye);
 
             List<Eye> eyes = (List<Eye>) entityManager.createQuery("SELECT e from Eye e WHERE e.nif=" +
                     in.getClienteSeleccionado().getNif()).getResultList();
@@ -98,7 +101,6 @@ public class Controller2 {
             in.getSeleccionado().setOiCilindro(eye.getOiCilindro());
             in.getSeleccionado().setOiAdicion(eye.getOiAdicion());
             in.getSeleccionado().setOiAgudeza(eye.getOiAgudeza());
-
 
             entityManager.merge(eye);
 
