@@ -30,9 +30,7 @@ public class Controller2 {
             eye.setNif(in.getClienteSeleccionado().getNif());
 
             Date date = in.getJCalendar1().getDate();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDate = simpleDateFormat.format(date);
-            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
+            java.sql.Date date1 = SQLDate(date);
             eye.setConsulta(date1);
 /*
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
@@ -84,20 +82,27 @@ public class Controller2 {
             eye.setNif(in.getClienteSeleccionado().getNif());
 
             Date date = in.getJCalendar1().getDate();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            String formattedDate = simpleDateFormat.format(date);
-            java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
+            java.sql.Date date1 = SQLDate(date);
             eye.setConsulta(date1);
 
             eye.setOdEsfera(Double.parseDouble(in.gettOD_ESFERA().getText()));
             eye.setOdCilindro(Double.parseDouble(in.gettOD_CILINDRO().getText()));
             eye.setOdAdicion(Double.parseDouble(in.gettOD_ADICION().getText()));
             eye.setOdAgudeza(Double.parseDouble(in.gettOD_AGUDEZA().getText()));
-
             eye.setOiEsfera(Double.parseDouble(in.gettID_ESFERA().getText()));
             eye.setOiCilindro(Double.parseDouble(in.gettID_CILINDRO().getText()));
             eye.setOiAdicion(Double.parseDouble(in.gettID_ADICION().getText()));
             eye.setOiAgudeza(Double.parseDouble(in.gettID_AGUDEZA().getText()));
+
+            in.getSeleccionado().setConsulta(date1);
+            in.getSeleccionado().setOdEsfera(eye.getOdEsfera());
+            in.getSeleccionado().setOdCilindro(eye.getOdCilindro());
+            in.getSeleccionado().setOdAdicion(eye.getOdAdicion());
+            in.getSeleccionado().setOdAgudeza(eye.getOdAgudeza());
+            in.getSeleccionado().setOiEsfera(eye.getOiEsfera());
+            in.getSeleccionado().setOiCilindro(eye.getOiCilindro());
+            in.getSeleccionado().setOiAdicion(eye.getOiAdicion());
+            in.getSeleccionado().setOiAgudeza(eye.getOiAgudeza());
 
             entityManager.merge(eye);
 
@@ -220,7 +225,8 @@ public class Controller2 {
             dIn.setSeleccionado(new Eye());
             Eye sel = dIn.getSeleccionado();
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");;
             String sDate = String.valueOf(table1.getValueAt(idx, 2));
             Date date = null;
             try {
@@ -228,9 +234,13 @@ public class Controller2 {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            /*
             String formattedDate = simpleDateFormat.format(date);
             java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
 
+             */
+
+            java.sql.Date date1 = SQLDate(date);
 
             sel.setId(Integer.valueOf((Integer) table1.getValueAt(idx, 0)));
             sel.setNif(String.valueOf(table1.getValueAt(idx, 1)));
@@ -254,5 +264,12 @@ public class Controller2 {
             dIn.gettOD_ESFERA().setText("" + sel.getOdAgudeza());
             dIn.getJCalendar1().setDate(sel.getConsulta());
         }
+    }
+
+    private java.sql.Date SQLDate(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = simpleDateFormat.format(date);
+        java.sql.Date date1 = java.sql.Date.valueOf(formattedDate);
+        return date1;
     }
 }
